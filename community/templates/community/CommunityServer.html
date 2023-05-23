@@ -1,0 +1,67 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+CommunityServer
+{% endblock %}
+{% block main %}
+<h1>Настройки</h1>
+{% if is_moderator %}
+<form method="post">
+    {% csrf_token %}
+    Name: <input type="text" name="name" value="{{ com.name }}">
+    Topic: <input type="text" name="topic" value="{{ com.info.topic }}">
+    Description: <input type="text" name="description" value="{{ com.info.description }}">
+    <button type="submit" name="update_server">Обновить настройки</button>
+</form>
+<br>
+<form method="post">
+    {% csrf_token %}
+    Title: <input type="text" name="title">
+    Content: <input type="text" name="content">
+    <button type="submit" name="create_post">Добавить пост</button>
+</form>
+{% if is_chapter %}
+<form method="post">
+    {% csrf_token %}
+    <h3>Добавить модератора</h3><select name="add_moderator" multiple>
+        {% for user in subscribers %}
+        <option value="{{ user.slug }}">{{ user.name }} {{ user.surname }}</option>
+        {% endfor %}
+    </select>
+    <h3>Удалить модератора</h3><select name="delete_moderator" multiple>
+        {% for user in moderator %}
+        <option value="{{ user.slug }}">{{ user.name }} {{ user.surname }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" name="update_moderator">Обноваить список модераторов</button>
+</form>
+{% endif %}
+{% endif %}
+<hr>
+{% for user in friend %}
+
+{{ user.name }} {{ user.surname }}
+{% endfor %}
+<form method="post">
+    {% csrf_token %}
+    <select name="add_friend" multiple>
+        {% for user in friend %}
+        {{user.name}}
+        <option value="{{ user.id }}">{{ user.name }} {{ user.surname }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Добавить друга в сообщество</button>
+</form>
+<hr>
+<h1>{{ com.name }}</h1>
+<h3>{{ com.info.topic }}</h3>
+<p>{{ com.info.description }}</p>
+{% if com.chat is not None %}
+<a href="{% url 'discussion:group' com.info.chat.id %}">Перейти в чат</a>
+{% endif %}
+<h1>Новости</h1>
+{% for p in post %}
+<h2>{{ p.title }}</h2>
+<p>{{ p.content }}</p>
+<hr>
+{% endfor %}
+{% endblock %}

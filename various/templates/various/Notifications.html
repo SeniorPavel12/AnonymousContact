@@ -1,0 +1,62 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+Search
+{% endblock %}
+{% block main %}
+<h1>Уведомления</h1>
+{% for n in notifications %}
+{% if n.type == 'SF' %}
+<h2>Приглашение в друзья</h2>
+<p>{{ n.content }}</p>
+{% if n.check_notification is False %}
+<form method="post">
+ {% csrf_token %}
+ <input type="hidden" name="id" value="{{ n.id }}">
+ <button type="submit" name="accept_friend" value="{{ n.sender_user }}">Принять приглашение</button>
+ <button type="submit" name="reject_friend" value="{{ n.sender_user }}">Отклонить приглашение</button>
+</form>
+{% elif n.check_notification is True %}
+{% if n.answer %}
+<p>Вы приняли запрос</p>
+{% else %}
+<p>Вы отклонили запрос</p>
+{% endif %}
+{% endif %}
+{% elif n.type == 'SC' %}
+<h2>Приглашение в сообщество</h2>
+<p>{{ n.content }}</p>
+{% if n.check_notification is False %}
+<form method="post">
+ {% csrf_token %}
+ <input type="hidden" name="id" value="{{ n.id }}">
+ <button type="submit" name="accept_community" value="{{ n.sender_community }}">Принять приглашение</button>
+ <button type="submit" name="reject_community" value="{{ n.sender_community }}">Отклонить приглашение</button>
+</form>
+{% elif n.check_notification is True %}
+{% if n.answer %}
+<p>Вы приняли запрос</p>
+{% else %}
+<p>Вы отклонили запрос</p>
+{% endif %}
+{% endif %}
+{% elif n.type == 'SG' %}
+<h2>Приглашение в группу</h2>
+<p>{{ n.content }}</p>
+{% if n.check_notification is False %}
+<form method="post">
+ {% csrf_token %}
+ <input type="hidden" name="id" value="{{ n.id }}">
+ <button type="submit" name="accept_group" value="{{ n.sender_group }}">Принять приглашение</button>
+ <button type="submit" name="reject_group" value="{{ n.sender_group }}">Отклонить приглашение</button>
+</form>
+{% elif n.check_notification is True %}
+{% if n.answer %}
+<p>Вы приняли запрос</p>
+{% else %}
+<p>Вы отклонили запрос</p>
+{% endif %}
+{% endif %}
+{% endif %}
+<hr>
+{% endfor %}
+{% endblock %}

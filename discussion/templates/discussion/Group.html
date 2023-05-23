@@ -1,0 +1,54 @@
+{% extends 'base_html/base.html' %}
+{% block title %}Чат с {{ user.slug }}{% endblock %}
+{% block main %}
+<h1>Чат {{ group.title }}</h1>
+<h1>Участники группы:</h1>
+<h3>{% for user in group_user %}
+{{ user.name }} {{ user.surname }}
+{% endfor %}</h3>
+{% if user_is_chapter %}
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <select name="add_user" multiple>
+        {% for user in all_user %}
+        <option value="{{ user.slug }}">{{ user.name }} {{ user.surname }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Добавить пользователя">
+</form>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <select name="delete_user" multiple>
+        {% for user in group_user %}
+        <option value="{{ user.slug }}">{{ user.name }} {{ user.surname }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Удалить пользователя">
+</form>
+{% endif %}
+<hr>
+{% for message in messages %}
+{% if messsage.create_user == request.user %}
+    <div class="my_message">{{ message.content }}</div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="delete_me_message" value="{{ message.id }}">Удалить у себя</button>
+    </form>
+{% else %}
+    <div class="your_message">{{ message.content }}</div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="delete_all_message" value="{{ message.id }}">Удалить везде</button>
+        <button type="submit" name="delete_me_message" value="{{ message.id }}">Удалить у себя</button>
+        <button type="submit" name="start_change">Изменить сообщение</button>
+    </form>
+{% endif %}
+{% endfor %}
+<form method="post">
+    {% csrf_token %}
+    <h1><input type="text" name="send_message">
+    <button type="submit">Отправить сообщение</button></h1>
+</form>
+{% endblock %}

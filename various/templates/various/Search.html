@@ -1,0 +1,29 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+Search
+{% endblock %}
+{% block main %}
+<h1>Поиск людей и сообществ</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="content">
+    <button type="submit" name="search_user">Поиск людей</button>
+    <button type="submit" name="search_community">Поиск сообществ</button>
+</form>
+{% if answer is None %}
+<h1>Мои друзья</h1>
+{% for u in all_user %}
+{% endfor %}
+<h1>Мои сообщества</h1>
+{% for c in all_community %}
+{% endfor %}
+{% else %}
+{% for a in answer %}
+{% if type_answer == 'community' %}
+
+{% else %}
+<a href="{% url 'various:look_profile' a.slug %}">{{ a.name }} {{ a.surname }}</a>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}

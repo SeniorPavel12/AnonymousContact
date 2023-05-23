@@ -1,0 +1,50 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+My chats
+{% endblock %}
+{% block main %}
+<h1>Создание чата с:</h1>
+<div>{% for user in all_user %}
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="create_chat" value="{{ user.slug }}">{{ user.name }} {{ user.surname }}</button>|
+    </form>
+    {% endfor %}
+</div>
+<hr>
+<h1>Создание группового чата</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="title_group">
+        <button type="submit" name="create_group">Создать группу</button>|
+    </form>
+<hr>
+<h1>Личные сообщения</h1>
+{% for chat in chats %}
+{% if my_user not in chat.unseeing.all %}
+{% if chat.second_user == my_user  %}
+<a href="{% url 'discussion:chat' chat.first_user.slug %}"><p>{{ chat.first_user.name }} {{ chat.first_user.surname }}</p></a>
+{% else %}
+<a href="{% url 'discussion:chat' chat.second_user.slug %}"><p>{{ chat.second_user.name }} {{ chat.second_user.surname }}</p></a>
+{% endif %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="delete_chat" value="{{ chat.id }}">Удалить чат</button>
+</form>
+<hr>
+{% endif %}
+{% endfor %}
+<h1>Групповые чаты</h1>
+{% for group in groups %}
+<a href="{% url 'discussion:group' group.id %}"><h2>{{ group.title }}</h2></a>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="delete_group" value="{{ group.id }}">Покинуть группу</button>
+</form>
+<h2>Участники:</h2>
+{% for user in group.user.all %}
+{{ user.name }} {{ user.surname }}
+{% endfor %}
+<hr>
+{% endfor %}
+{% endblock %}

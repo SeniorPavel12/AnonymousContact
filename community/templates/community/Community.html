@@ -1,0 +1,27 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+Server management
+{% endblock %}
+{% block main %}
+<h1>Все сообщества</h1>
+<h3>{% for com in all_community %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="join_com" value="{{ com.id }}">{{ com.name }}</button>
+</form>
+{% endfor %}</h3>
+<h1>Мои сообщества:</h1>
+<h3>{% for com in my_community %}
+<a href="{% url 'community:community_server' com.id %}">{{ com.name }}</a>|
+{% endfor %}</h3>
+<hr>
+<h1>Создать сообщество</h1>
+<form method="post">
+    {% csrf_token %}
+    Название:<input type="text" name="name">
+    Тема:<input type="text" name="topic">
+    Описание:<input type="text" name="description">
+    Создавать чат?<input type="checkbox" name="chat">
+    <button type="submit" name="create_community">Создать сообщество</button>
+</form>
+{% endblock %}

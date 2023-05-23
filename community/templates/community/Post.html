@@ -1,0 +1,12 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+News
+{% endblock %}
+{% block main %}
+<h1>Мои новости</h1>
+{% for p in post %}
+<h1>{{ p.title }}</h1>
+<p>{{ p.content }}</p>
+<i>{{ p.author }}</i>
+{% endfor %}
+{% endblock %}

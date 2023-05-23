@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+{% block sidebar %}
+<div><a href="{% url 'user:profile' %}"><h3>MY_PROFILE</h3></a>|<a href="{% url 'discussion:chats' %}"><h3>DISCUSSION</h3></a><a href="{% url 'community:post' %}">|<h3>NEWS</h3></a><a href="{% url 'community:community' %}">|<h3>COMMUNITY</h3></a><a href="{% url 'various:search' %}">|<h3>SEARCH</h3></a><a href="{% url 'various:notifications' %}">|<h3>NOTOFICATIONS</h3></a></div>
+<hr>
+{% endblock %}
+{% block main %}
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+Profile
+{% endblock %}
+{% block main %}
+<a href="{% url 'various:logout' %}">Выйти из аккаунта</a>
+<a href="{% url 'various:login' %}">Войти в другой акканунт</a>
+<a href="{% url 'user:edit_profile' %}">Изменить профиль</a>
+<h2>Имя, фамилия: {{ name }} {{ surname }}</h2>
+<h2>Name - {{ user_id }}</h2>
+<h2>Age - {{ user.profile.age }}</h2>
+<h2>Status - {{ user.profile.status }}</h2>
+<hr>
+<h1>Мои друзья</h1>
+{% for f in friends %}
+<h2>{{ f.user.name }} {{ f.user.surname }}</h2>
+{% endfor %}
+<hr>
+<h1>Создать пост</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="text" name="title">
+    <input type="text" name="content">
+    <button type="submit" name="post">Выложить пост</button>
+</form>
+{% for post in posts %}
+<h3>{{ post.title }}</h3>
+<p>{{ post.content }}</p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base_html/base.html' %}
+{% block title %}
+Search
+{% endblock %}
+{% block main %}
+{% if subscriber_flag is False %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="send_friend">Отправить запрос в друзья</button>
+</form>
+{% else %}
+<p>Заявка в друзья отправлена</p>
+{% endif %}
+{% if chat_flag is True %}
+<a href="{% url 'discussion:chat' user.slug %}">Перейти к чату</a>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="create_chat" value="{{ user.slug }}">Создать чат</button>
+</form>
+{% endif %}
+<h2>Имя, фамилия: {{ user.name }} {{ user.surname }}</h2>
+<h2>Name - {{ user.slug}}</h2>
+<h2>Age - {{ user.profile.age }}</h2>
+<h2>Status - {{ user.profile.status }}</h2>
+<hr>
+{% for f in user.profile.friends.all %}
+<h2>{{ f.user.name }} {{ f.user.surname }}</h2>
+{% endfor %}
+<hr>
+{% for post in user.profile.post.all %}
+<h3>{{ post.title }}</h3>
+<p>{{ post.content }}</p>
+{% endfor %}
+{% endblock %}

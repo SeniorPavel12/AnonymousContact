@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Анонимный чат</title>
+</head>
+<body>
+<h1>{{Чат с :}}</h1>
+{% if chat.first_user == request.user.slug %}
+    <h1>{{ chat.second_nickname }}</h1>
+{% else %}
+    <h1>{{ chat.first_nickname }}</h1>
+{% endif %}
+{% for message in messages %}
+<p>Отправил
+{% if message.author == request.user.slug %}
+{% else %}
+{{ message.author }}
+{% endif %}</p>
+    <p>{{ message.content }}</p>
+{% endfor %}
+</body>
+</html>

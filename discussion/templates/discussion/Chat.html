@@ -1,0 +1,57 @@
+{% extends 'base_html/base.html' %}
+{% block title %}Чат с {{ user.slug }}{% endblock %}
+{% block main %}
+<h1>Чат с {{ user.name }} {{ user.surname }}</h1>
+{% for message in messages %}
+{% if messsage.create_user == my_user %}
+<div class="my_message">{{ message.content }}</div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="delete_me_message" value="{{ message.id }}">Удалить у себя</button>
+    </form>
+{% else %}
+<div class="your_message">{{ message.content }}</div>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="delete_all_message" value="{{ message.id }}">Удалить везде</button>
+    <button type="submit" name="delete_me_message" value="{{ message.id }}">Удалить у себя</button>
+    <button type="submit" name="start_change">Изменить сообщение</button>
+</form>
+{% endif %}
+{% endfor %}
+<form method="post">
+    {% csrf_token %}
+    <h1><input type="text" name="send_message">
+    <button type="submit">Отправить сообщение</button></h1>
+</form>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
